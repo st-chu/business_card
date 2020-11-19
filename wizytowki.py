@@ -10,6 +10,9 @@ class BusinessCard:
         self.position = position
         self.e_mail = e_mail
 
+    def __str__(self):
+        return f'{self.first_name} {self.last_name} email: {self.e_mail}'
+
 
 def business_card():
     fake = Faker('pl_PL')
@@ -38,7 +41,7 @@ def show_business_card(card):
 def show_business_cards(list):
     for data in list:
         print('-' * 50)
-        print(f'{data.first_name} {data.last_name}, email: {data.e_mail}')
+        print(data)
 
 
 business_card_list = creating_business_cards_list(10)
