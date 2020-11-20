@@ -3,26 +3,38 @@ from faker.providers import job
 
 
 class BusinessCard:
-    def __init__(self, first_name, last_name, company_name, position, e_mail):
+    def __init__(self, first_name, last_name, phone_number):
         self.first_name = first_name
         self.last_name = last_name
-        self. company_name = company_name
-        self.position = position
-        self.e_mail = e_mail
+        self.phone_number = phone_number
 
     @property
-    def len_first_last_name(self):
+    def label_length(self):
         return len(self.first_name + ' ' + self.last_name)
 
     def __str__(self):
-        return f'{self.first_name} {self.last_name} email: {self.e_mail}'
+        return f'{self.first_name} {self.last_name}, phone number: {self.phone_number}'
 
     def __repr__(self):
         return f'BusinessCard(first_name={self.first_name}, last_name={self.last_name}, ' \
-               f'company_name={self.company_name}, position={self.position}, e_mail={self.e_mail}) '
+               f'phone_number={self.phone_number})'
 
     def contact(self):
-        print(f'Kontaktuj się z {self.first_name} {self.last_name}, stanowisko: {self.position}, e-mail: {self.e_mail}')
+        print(f'Wybieram numer +48 {self.phone_number} i dzwonię do {self.first_name} {self.last_name}.')
+
+
+class BaseContact(BusinessCard):
+    def __init__(self, email, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.email = email
+
+
+class BusinessContact(BusinessCard):
+    def __init__(self, email, job, company_name, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.email = email
+        self.job = job
+        self.company_name = company_name
 
 
 def business_card():
@@ -31,9 +43,7 @@ def business_card():
     return BusinessCard(
         first_name=fake.first_name(),
         last_name=fake.last_name(),
-        company_name=fake.company(),
-        position=fake.job(),
-        e_mail=fake.email()
+        phone_number=fake.phone_number(),
     )
 
 
@@ -55,8 +65,7 @@ def show_business_cards(list):
         print(data)
 
 
-ja = BusinessCard('Marek', 'Starzyk', 'Zinel FM', 'technik', 'stachu.ms9@gmail.com')
-business_card_list = creating_business_cards_list(10)
-business_card_list = sorted(business_card_list, key=lambda name: name.first_name)
-business_card_list[3].contact()
-print(business_card_list[3].len_first_last_name)
+ja = BaseContact('marrek', 'starzyk', 883397333)
+#business_card_list = sorted(business_card_list, key=lambda name: name.first_name)
+#business_card_list[3].contact()
+print(ja.label_length)
