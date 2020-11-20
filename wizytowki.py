@@ -34,8 +34,8 @@ class BaseContact(BusinessCard):
 
 
 class BusinessContact(BusinessCard):
-    def __init__(self, email, job, company_name, *args, **kwargs):
-        super().__init__(*args, **kwargs)
+    def __init__(self, first_name, last_name, phone_number, email, job, company_name):
+        super().__init__(first_name, last_name, phone_number)
         self.email = email
         self.job = job
         self.company_name = company_name
@@ -50,7 +50,7 @@ def create_contact(type_of_card, quantity):
     fake = Faker('pl_PL')
     fake.add_provider(job)
     list_of_card = []
-    if type_of_card == 'BaseContact':
+    if type_of_card == BaseContact and type(quantity) == int:
         for card in range(quantity):
             list_of_card.append(BaseContact(
                 first_name=fake.first_name(),
@@ -59,7 +59,7 @@ def create_contact(type_of_card, quantity):
                 email=fake.email()
             ))
         return list_of_card
-    elif type_of_card == 'BusinessContact':
+    elif type_of_card == BusinessContact and type(quantity) == int:
         for card in range(quantity):
             list_of_card.append(BusinessContact(
                 first_name=fake.first_name(),
@@ -70,65 +70,33 @@ def create_contact(type_of_card, quantity):
                 company_name=fake.company()
             ))
         return list_of_card
+    else:
+        print("You made a mistake try again")
 
 
-class BaseContact(BusinessCard):
-    def __init__(self, phone_number, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.phone_number = phone_number
-        self.company_name = 0
-        self.position = 0
+def show_card_list(card_list):
+    list = sorted(card_list, key= lambda last_name: last_name.last_name)
+    if type(list[0]) == BaseContact:
+        print('*'*72)
+        print('|' + 'BASE CONTACT'.center(70) + '|')
+        for card in list:
+            print('*'*72)
+            print(
+                f'Osoba kontaktowa: {card.first_name} {card.last_name}\nTelefon kontaktowy: {card.phone_number}'
+                f'\nAdres e-mail: {card.email}'
+            )
+    elif type(list[0]) == BusinessContact:
+        print('*' * 72)
+        print('|' + 'BUSINESS CONTACT'.center(70) + '|')
+        for card in list:
+            print('*' * 72)
+            print(
+                f'Osoba kontaktowa: {card.first_name} {card.last_name}\nTelefon kontaktowy: {card.phone_number}' \
+                f'\nAdres e-mail: {card.email}\nNazwa firmy: {card.company_name}\nStanowisko: {card.job}'
+            )
 
 
-    @property
-    def len_first_last_name(self):
-        return len(self.first_name + ' ' + self.last_name)
-
-    def __str__(self):
-        return f'{self.first_name} {self.last_name} email: {self.e_mail}'
-
-    def __repr__(self):
-        return f'BusinessCard(first_name={self.first_name}, last_name={self.last_name}, ' \
-               f'company_name={self.company_name}, position={self.position}, e_mail={self.e_mail}) '
-
-    def contact(self):
-        print(f'Kontaktuj się z {self.first_name} {self.last_name}, stanowisko: {self.position}, e-mail: {self.e_mail}')
-
-
-def business_card():
-    fake = Faker('pl_PL')
-    fake.add_provider(job)
-    return BusinessCard(
-        first_name=fake.first_name(),
-        last_name=fake.last_name(),
-        phone_number=fake.phone_number(),
-    )
-
-
-def creating_business_cards_list(quantity):
-    list_1 = []
-    for card in range(quantity):
-        list_1.append(business_card())
-    return list_1
-
-
-def show_business_cards(list):
-    for data in list:
-        print('-' * 60)
-        print(data)
-<<<<<<< HEAD
-
-
-ja = BaseContact
-business_card_list = creating_business_cards_list(10)
-business_card_list = sorted(business_card_list, key=lambda name: name.first_name)
-business_card_list[3].contact()
-print(ja)
-=======
-
-
-basic_list = create_contact('BaseContact', 3)
-business_list = create_contact('BusinessContact', 5)
-
-
->>>>>>> for_test
+basic_list = create_contact(BaseContact, 2)
+business_list = create_contact(BusinessContact, 2)
+show_card_list(basic_list)
+show_card_list(business_list)
