@@ -11,6 +11,29 @@ class BusinessCard:
         self.e_mail = e_mail
 
 
+class BaseContact(BusinessCard):
+    def __init__(self, phone_number, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.phone_number = phone_number
+        self.company_name = 0
+        self.position = 0
+
+
+    @property
+    def len_first_last_name(self):
+        return len(self.first_name + ' ' + self.last_name)
+
+    def __str__(self):
+        return f'{self.first_name} {self.last_name} email: {self.e_mail}'
+
+    def __repr__(self):
+        return f'BusinessCard(first_name={self.first_name}, last_name={self.last_name}, ' \
+               f'company_name={self.company_name}, position={self.position}, e_mail={self.e_mail}) '
+
+    def contact(self):
+        print(f'Kontaktuj się z {self.first_name} {self.last_name}, stanowisko: {self.position}, e-mail: {self.e_mail}')
+
+
 def business_card():
     fake = Faker('pl_PL')
     fake.add_provider(job)
@@ -37,10 +60,12 @@ def show_business_card(card):
 
 def show_business_cards(list):
     for data in list:
-        print('-' * 50)
-        print(f'{data.first_name} {data.last_name}, email: {data.e_mail}')
+        print('-' * 60)
+        print(data)
 
 
+ja = BaseContact
 business_card_list = creating_business_cards_list(10)
-show_business_cards(business_card_list)
-show_business_card(business_card_list[2])
+business_card_list = sorted(business_card_list, key=lambda name: name.first_name)
+business_card_list[3].contact()
+print(ja)
